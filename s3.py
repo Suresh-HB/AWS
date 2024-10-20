@@ -59,6 +59,14 @@ def delete_bucket(bucket_name):
     )
     return response
 
+def transfer_large_file(file_path, bucket_name):
+    try:
+        object_name = os.path.basename(file_path)
+        response = client.upload_file(file_path, bucket_name, object_name)
+        print(f"Large file '{file_path}' transferred successfully to '{bucket_name}/{object_name}'.")
+    except ClientError as e:
+        print("Error occurred while transferring large file:", e)
+
 
 def main():
 
@@ -75,12 +83,16 @@ def main():
     print(all_buckets)
 
     file_path = r"C:\Users\Suresh\Desktop\pythonBl\Boto3CRUD\student.csv"
+    large_file_path = r"C:\Users\Suresh\Desktop\pythonBl\Suresh-Book"
+
     bucket_name = 'suresh-demo-bucket'
     upload_file(file_path, bucket_name, 'student.csv')
 
     download_file("suresh-demo-bucket", "student.csv", "./aws_student")
     delete_object("suresh-demo-bucket", "student.csv")
     delete_bucket("suresh-demo-bucket")
+
+    transfer_large_file(large_file_path, bucket_name)
    
 
 if __name__ == '__main__':
